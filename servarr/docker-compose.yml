@@ -1,0 +1,171 @@
+# Compose file for the *arr stack. Configuration files are stored 
+# in a docker folder mounted in root. Change to bind mounts if needed.
+# All containers are ran with user and group ids of the main user and 
+# share to aviod permissions issues of downloaded files, please refer
+# the read me file for more information.
+version: '3.9'
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 8080:8080 # sabnzbd
+      - 9080:9080 # qbittorrent Web-UI
+      - 6881:6881 # qbittorrent-tcp
+      - 6881:6881/udp # qbittorrent-udp
+      - 9696:9696 # prowlarr
+      - 8191:8191 # flaresolver
+      - 7878:7878 # prowlarr
+      - 8989:8989 # flaresolver      
+    volumes:
+      - ${DOCKER_CONFIG_PATH}/gluetun/config:/gluetun
+    environment:
+      - FREE_ONLY=on
+      - DOT=off
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES}
+      - TZ=Etc/UTC
+      - UPDATER_PERIOD=${UPDATER_PERIOD}
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE}
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+    healthcheck:
+      test: ping -c 1 www.google.com || exit 1
+      interval: 60s
+      timeout: 20s
+      retries: 5
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=9080
+      - TORRENTING_PORT=6881
+    volumes:
+      - ${DOCKER_CONFIG_PATH}/qbittorrent/config:/config
+      - ${HOST_PATH}/data/torrents:/data/torrents
+    network_mode: service:gluetun
+    depends_on: 
+      - gluetun
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_CONFIG_PATH}/sabnzbd/config:/config
+      - ${HOST_PATH}/data/usenet:/data/usenet
+    restart: unless-stopped
+    network_mode: service:gluetun
+    depends_on: 
+      - gluetun
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_CONFIG_PATH}/prowlarr/config:/config
+    restart: unless-stopped
+    network_mode: service:gluetun
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_CONFIG_PATH}/sonarr/config:/config
+      - ${HOST_PATH}/data:/data
+    network_mode: service:gluetun
+    depends_on: 
+      - gluetun
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_CONFIG_PATH}/radarr/config:/config
+      - ${HOST_PATH}/data:/data
+    network_mode: service:gluetun
+    depends_on: 
+      - gluetun
+      
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_CONFIG_PATH}/bazarr/config:/config
+      - ${HOST_PATH}/data:/data
+    network_mode: service:gluetun
+    depends_on: 
+      - gluetun
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    network_mode: service:gluetun
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=Etc/UTC
+    depends_on: 
+      - gluetun
+    restart: unless-stopped
+    
+  jellyfin:
+    container_name: jellyfin
+    image: jellyfin/jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_CONFIG_PATH}/jellyfin/config:/config
+      - ${HOST_PATH}/data:/data
+    ports:
+      - 8096:8096
+    devices:
+     - /dev/dri:/dev/dri # QuickSync
+    restart: unless-stopped
+
+  jellyseerr:
+    container_name: jellyseerr
+    image: fallenbagel/jellyseerr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_CONFIG_PATH}/jellyseerr/config:/app/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped

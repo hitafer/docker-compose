@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+    netbird:
+        image: netbirdio/netbird:latest
+        volumes:
+            - ./netbird-client:/etc/netbird
+        environment:
+            - NB_SETUP_KEY=${SETUP_KEY}
+        cap_add:
+            - NET_ADMIN

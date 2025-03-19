@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  pingvin-share:
+    image: stonith404/pingvin-share
+    restart: unless-stopped
+    ports:
+      - 3000:${CONTAINERPORT}
+    volumes:
+      - "./data:/opt/app/backend/data"
+      - "./data/images:/opt/app/frontend/public/img"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pingvin-share.rule=Host(`share.${DOMAIN}`)
+      - traefik.http.routers.pingvin-share.entrypoints=${ENTRYPOINTS}
+      - traefik.http.routers.pingvin-share.tls=true
+      - traefik.http.services.pingvin-share.loadbalancer.server.port=${CONTAINERPORT}
+      - traefik.http.routers.pingvin-share.tls.certresolver=cloudflare
+     networks:
+      - proxy
+networks:
+  proxy:
+    external: true
