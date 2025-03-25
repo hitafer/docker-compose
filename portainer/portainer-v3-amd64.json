@@ -110,16 +110,6 @@
         { "container": "/config", "bind": "/path/to/config/prowlarr", "readonly": false }
       ],
       "restart_policy": "always"
-    },
-    {
-      "id": 7,
-      "type": 1,
-      "title": "Bazarr (Subtitles)",
-      "description": "Automatische Untertitelverwaltung für Filme & Serien",
-      "categories": ["Media", "Automation"],
-      "platform": "linux",
-      "image": "lscr.io/linuxserver/bazarr:latest",
-      "ports": ["6767:6767/tcp"],
-      "volumes": [
-        { "container": "/config", "bind": "/path/to/config/bazarr", "readonly": false },
-        { "container": "/tv", "bind": "/path/to/media/TV Shows", 
+    }
+	]
+} 
