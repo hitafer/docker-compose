@@ -1,50 +1,112 @@
 {
   "version": "3",
   "templates": [
-   	   {
+    {
       "id": 1,
       "type": 1,
       "title": "Gluetun VPN",
       "description": "Ein sicherer VPN-Client-Container basierend auf Gluetun",
-      "categories": ["VPN", "Security"],
+      "categories": [
+        "VPN",
+        "Security"
+      ],
       "platform": "linux",
       "logo": "https://avatars.githubusercontent.com/u/65804842?s=200&v=4",
       "image": "qmcgaw/gluetun:latest",
-      "ports": ["8000:8000/tcp", "8001:8001/tcp"],
+      "ports": [
+        "8000:8000/tcp",
+        "8001:8001/tcp"
+      ],
       "volumes": [
-        { "container": "/gluetun", "bind": "/path/to/gluetun/config", "readonly": false }
+        {
+          "container": "/gluetun",
+          "bind": "/path/to/gluetun/config",
+          "readonly": false
+        }
       ],
       "env": [
-        { "name": "TZ", "label": "Zeitzone", "default": "Europe/Berlin" },
-        { "name": "VPN_SERVICE_PROVIDER", "label": "VPN-Anbieter", "default": "custom" },
-        { "name": "OPENVPN_USER", "label": "OpenVPN-Benutzername", "default": "" },
-        { "name": "OPENVPN_PASSWORD", "label": "OpenVPN-Passwort", "default": "" },
-        { "name": "VPN_TYPE", "label": "VPN-Typ", "default": "openvpn" }
+        {
+          "name": "TZ",
+          "label": "Zeitzone",
+          "default": "Europe/Berlin"
+        },
+        {
+          "name": "VPN_SERVICE_PROVIDER",
+          "label": "VPN-Anbieter",
+          "default": "custom"
+        },
+        {
+          "name": "OPENVPN_USER",
+          "label": "OpenVPN-Benutzername",
+          "default": ""
+        },
+        {
+          "name": "OPENVPN_PASSWORD",
+          "label": "OpenVPN-Passwort",
+          "default": ""
+        },
+        {
+          "name": "VPN_TYPE",
+          "label": "VPN-Typ",
+          "default": "openvpn"
+        }
       ],
       "restart_policy": "always",
       "network": "bridge",
       "privileged": true,
-      "cap_add": ["NET_ADMIN"]
+      "cap_add": [
+        "NET_ADMIN"
+      ]
     },
     {
       "id": 2,
       "type": 1,
       "title": "JDownloader 2",
       "description": "Ein leistungsstarker Download-Manager",
-      "categories": ["Download", "Utility"],
+      "categories": [
+        "Download",
+        "Utility"
+      ],
       "platform": "linux",
       "logo": "https://jdownloader.org/_media/logo/jd_logo.png",
       "image": "jlesage/jdownloader-2:latest",
-      "ports": ["5800:5800", "3129:3129"],
+      "ports": [
+        "5800:5800",
+        "3129:3129"
+      ],
       "volumes": [
-        { "container": "/config", "bind": "/path/to/jdownloader2/config", "readonly": false },
-        { "container": "/output", "bind": "/path/to/jdownloader2/output", "readonly": false }
+        {
+          "container": "/config",
+          "bind": "/path/to/jdownloader2/config",
+          "readonly": false
+        },
+        {
+          "container": "/output",
+          "bind": "/path/to/jdownloader2/output",
+          "readonly": false
+        }
       ],
       "env": [
-        { "name": "TZ", "label": "Zeitzone", "default": "Europe/Berlin" },
-        { "name": "USER_ID", "label": "Benutzer-ID", "default": "1000" },
-        { "name": "GROUP_ID", "label": "Gruppen-ID", "default": "1000" },
-        { "name": "DARK_MODE", "label": "Dunkelmodus", "default": "1" }
+        {
+          "name": "TZ",
+          "label": "Zeitzone",
+          "default": "Europe/Berlin"
+        },
+        {
+          "name": "USER_ID",
+          "label": "Benutzer-ID",
+          "default": "1000"
+        },
+        {
+          "name": "GROUP_ID",
+          "label": "Gruppen-ID",
+          "default": "1000"
+        },
+        {
+          "name": "DARK_MODE",
+          "label": "Dunkelmodus",
+          "default": "1"
+        }
       ],
       "restart_policy": "always",
       "network": "bridge"
@@ -54,14 +116,31 @@
       "type": 1,
       "title": "Radarr (Movies)",
       "description": "Automatische Verwaltung und Download von Filmen",
-      "categories": ["Media", "Automation"],
+      "categories": [
+        "Media",
+        "Automation"
+      ],
       "platform": "linux",
       "image": "lscr.io/linuxserver/radarr:latest",
-      "ports": ["7878:7878/tcp"],
+      "ports": [
+        "7878:7878/tcp"
+      ],
       "volumes": [
-        { "container": "/config", "bind": "/path/to/config/radarr", "readonly": false },
-        { "container": "/movies", "bind": "/path/to/media/Movies", "readonly": false },
-        { "container": "/downloads", "bind": "/path/to/downloads", "readonly": false }
+        {
+          "container": "/config",
+          "bind": "/path/to/config/radarr",
+          "readonly": false
+        },
+        {
+          "container": "/movies",
+          "bind": "/path/to/media/Movies",
+          "readonly": false
+        },
+        {
+          "container": "/downloads",
+          "bind": "/path/to/downloads",
+          "readonly": false
+        }
       ],
       "restart_policy": "always"
     },
@@ -70,14 +149,31 @@
       "type": 1,
       "title": "Sonarr (TV Shows)",
       "description": "Automatische Verwaltung und Download von TV-Serien",
-      "categories": ["Media", "Automation"],
+      "categories": [
+        "Media",
+        "Automation"
+      ],
       "platform": "linux",
       "image": "lscr.io/linuxserver/sonarr:latest",
-      "ports": ["8989:8989/tcp"],
+      "ports": [
+        "8989:8989/tcp"
+      ],
       "volumes": [
-        { "container": "/config", "bind": "/path/to/config/sonarr", "readonly": false },
-        { "container": "/tv", "bind": "/path/to/media/TV Shows", "readonly": false },
-        { "container": "/downloads", "bind": "/path/to/downloads", "readonly": false }
+        {
+          "container": "/config",
+          "bind": "/path/to/config/sonarr",
+          "readonly": false
+        },
+        {
+          "container": "/tv",
+          "bind": "/path/to/media/TV Shows",
+          "readonly": false
+        },
+        {
+          "container": "/downloads",
+          "bind": "/path/to/downloads",
+          "readonly": false
+        }
       ],
       "restart_policy": "always"
     },
@@ -86,14 +182,31 @@
       "type": 1,
       "title": "Lidarr (Music)",
       "description": "Automatische Verwaltung und Download von Musik",
-      "categories": ["Media", "Automation"],
+      "categories": [
+        "Media",
+        "Automation"
+      ],
       "platform": "linux",
       "image": "lscr.io/linuxserver/lidarr:latest",
-      "ports": ["8686:8686/tcp"],
+      "ports": [
+        "8686:8686/tcp"
+      ],
       "volumes": [
-        { "container": "/config", "bind": "/path/to/config/lidarr", "readonly": false },
-        { "container": "/music", "bind": "/path/to/media/Music", "readonly": false },
-        { "container": "/downloads", "bind": "/path/to/downloads", "readonly": false }
+        {
+          "container": "/config",
+          "bind": "/path/to/config/lidarr",
+          "readonly": false
+        },
+        {
+          "container": "/music",
+          "bind": "/path/to/media/Music",
+          "readonly": false
+        },
+        {
+          "container": "/downloads",
+          "bind": "/path/to/downloads",
+          "readonly": false
+        }
       ],
       "restart_policy": "always"
     },
@@ -102,14 +215,44 @@
       "type": 1,
       "title": "Prowlarr (Indexer Manager)",
       "description": "Verwaltet Indexer für Radarr, Sonarr und Lidarr",
-      "categories": ["Media", "Automation"],
+      "categories": [
+        "Media",
+        "Automation"
+      ],
       "platform": "linux",
       "image": "lscr.io/linuxserver/prowlarr:latest",
-      "ports": ["9696:9696/tcp"],
+      "ports": [
+        "9696:9696/tcp"
+      ],
       "volumes": [
-        { "container": "/config", "bind": "/path/to/config/prowlarr", "readonly": false }
+        {
+          "container": "/config",
+          "bind": "/path/to/config/prowlarr",
+          "readonly": false
+        }
       ],
       "restart_policy": "always"
-    }
-	]
-} 
+    },
+    {
+      "id": 7,
+      "type": 1,
+      "title": "Bazarr (Subtitles)",
+      "description": "Automatische Untertitelverwaltung für Filme & Serien",
+      "categories": [
+        "Media",
+        "Automation"
+      ],
+      "platform": "linux",
+      "image": "lscr.io/linuxserver/bazarr:latest",
+      "ports": [
+        "6767:6767/tcp"
+      ],
+      "volumes": [
+        {
+          "container": "/config",
+          "bind": "/path/to/config/bazarr",
+          "readonly": false
+        },
+        {
+          "container": "/tv",
+          "bind": "/path/to/media/TV Shows",
