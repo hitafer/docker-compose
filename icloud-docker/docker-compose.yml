@@ -1,0 +1,15 @@
+services:
+  icloud:
+    image: mandarons/icloud-drive
+    environment:
+      - PUID=1000
+      - PGID=1000
+    env_file:
+      - .env.icloud # Must contain ENV_CONFIG_FILE_PATH=/config/config.yaml and optionally, ENV_ICLOUD_PASSWORD=<password>
+    container_name: icloud
+    restart: unless-stopped
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ${BACK_UP_PATH}:/icloud
+      - ./config:/config # Must contain config.yaml
