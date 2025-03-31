@@ -9,7 +9,7 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_STOPPED=true
       - WATCHTOWER_REVIVE_STOPPED=false
-      - WATCHTOWER_SCHEDULE=0 30 8 * * 1
+      - WATCHTOWER_SCHEDULE=30 8 * * 1 #At 08:30 on Monday.
       - WATCHTOWER_NOTIFICATIONS=shoutrrr
       - WATCHTOWER_NOTIFICATION_URL=discord://TOKEN@WEBHOOKID
     volumes:
