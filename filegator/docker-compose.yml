@@ -7,3 +7,6 @@ services:
       - "8080:8080"
     volumes:
       - /storage:/var/www/filegator/repository
+
+
+#Default user admin/admin123
