@@ -1,0 +1,9 @@
+services:
+  filegator:
+    container_name: filegator
+    image: filegator/filegator:latest #for arm use latest-multiarch
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /storage:/var/www/filegator/repository
